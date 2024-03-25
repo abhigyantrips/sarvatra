@@ -5,6 +5,7 @@ import { siteConfig } from '@/config/site';
 import { fontMono, fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 
+import { SiteHeader } from '@/components/site-header';
 import { TailwindIndicator } from '@/components/tailwind-indicator';
 import { ThemeProvider } from '@/components/theme-provider';
 
@@ -40,13 +41,14 @@ export default function RootLayout({
       <head />
       <body
         className={cn(
-          'relative flex min-h-screen flex-col bg-background font-sans antialiased',
+          'relative flex min-h-screen flex-col bg-background font-sans antialiased transition-colors duration-200',
           fontSans.variable,
           fontMono.variable
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="mx-10 flex-1">{children}</div>
+          <SiteHeader />
+          <div className="container flex-1">{children}</div>
           <TailwindIndicator />
         </ThemeProvider>
       </body>
