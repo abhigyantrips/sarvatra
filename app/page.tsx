@@ -59,7 +59,7 @@ export default function Login() {
         values.password === process.env.NEXT_PUBLIC_TEST_PASSWORD
       ) {
         router.push('/profile');
-        toast('Login successful.');
+        toast.success('Login successful.');
       } else {
         setLoading(false);
         toast.error('Something went wrong!', {

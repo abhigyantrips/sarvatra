@@ -38,11 +38,13 @@ export function SiteHeader() {
         <h1 className="block text-2xl font-extrabold uppercase">
           {siteConfig.title}
         </h1>
-        <div className="flex gap-4 pl-8">
-          <p>Results</p>
-          <p>Courses</p>
-          <p>Students</p>
-        </div>
+        {pathname !== '/' && (
+          <div className="flex gap-4 pl-8">
+            <p>Results</p>
+            <p>Courses</p>
+            <p>Students</p>
+          </div>
+        )}
       </div>
       <div className="flex gap-2 p-2">
         <ThemeSwitcher />
