@@ -11,7 +11,22 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  name      String?
+}
+
+model Course {
+  id        Int    @id @default(autoincrement())
+  name      String
+  semesters Int
+  credits   Int
+  total     Int
+}
+
+model Subject {
+  id       Int @id @default(autoincrement())
+  semester Int
 }
