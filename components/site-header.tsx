@@ -1,6 +1,9 @@
 'use client';
 
+import { CircleUser } from 'lucide-react';
+
 import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { siteConfig } from '@/config/site';
@@ -9,6 +12,7 @@ import { cn } from '@/lib/utils';
 
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Button } from '@/components/ui/button';
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -34,9 +38,27 @@ export function SiteHeader() {
         <h1 className="block text-2xl font-extrabold uppercase">
           {siteConfig.title}
         </h1>
+        <div className="flex gap-4 pl-8">
+          <p>Results</p>
+          <p>Courses</p>
+          <p>Students</p>
+        </div>
       </div>
-      <div className="p-2">
+      <div className="flex gap-2 p-2">
         <ThemeSwitcher />
+        {pathname !== '/' && (
+          <Button
+            variant="secondary"
+            size="icon"
+            className="rounded-full"
+            asChild
+          >
+            <Link href="/profile">
+              <CircleUser className="h-5 w-5" />
+              <span className="sr-only">Toggle user menu</span>
+            </Link>
+          </Button>
+        )}
       </div>
     </header>
   );

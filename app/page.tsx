@@ -58,7 +58,7 @@ export default function Login() {
         values.id === process.env.NEXT_PUBLIC_TEST_ID &&
         values.password === process.env.NEXT_PUBLIC_TEST_PASSWORD
       ) {
-        router.push('/student');
+        router.push('/profile');
         toast('Login successful.');
       } else {
         setLoading(false);
@@ -70,8 +70,8 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh_-_5rem)] w-full flex-col items-center justify-center">
-      <Card className="w-[350px]">
+    <div className="flex min-h-[calc(100vh_-_theme(spacing.20))] w-full flex-col items-center justify-center">
+      <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Login</CardTitle>
         </CardHeader>
