@@ -25,6 +25,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+import { ChangePassword } from './change-password';
+import { ContactForm } from './contact-form';
+import { IdentificationForm } from './id-form';
+import { ProfileForm } from './profile-form';
+
 export default function Profile() {
   return (
     <div className="space-y-6 py-10">
@@ -33,7 +38,7 @@ export default function Profile() {
           Jai Hind, <span className="font-bold">Lt. Col. Vivek</span>
         </h2>
         <p className="text-muted-foreground">
-          Manage your account settings and set e-mail preferences.
+          Manage your profile details and other information here.
         </p>
       </div>
       <div className="grid items-start gap-6">
@@ -46,84 +51,60 @@ export default function Profile() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form className="grid grid-cols-6 gap-2">
-                <Input
-                  placeholder="Rank"
-                  value="Lt. Col."
-                  disabled
-                  className="col-span-1"
-                />
-                <Input
-                  placeholder="Full Name"
-                  value="Vivek Pandey"
-                  disabled
-                  className="col-span-2"
-                />
-                <div className="col-span-1" />
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={'outline'}
-                      className="col-span-1 pl-3 text-left font-normal"
-                      disabled
-                    >
-                      <span>Date of Birth</span>
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar mode="single" />
-                  </PopoverContent>
-                </Popover>
-                <Select value="O+" disabled>
-                  <SelectTrigger className="col-span-1">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="O+">O+</SelectItem>
-                    <SelectItem value="O-">O-</SelectItem>
-                    <SelectItem value="A+">A+</SelectItem>
-                    <SelectItem value="A-">A-</SelectItem>
-                    <SelectItem value="B+">B+</SelectItem>
-                    <SelectItem value="B-">B-</SelectItem>
-                    <SelectItem value="AB+">AB+</SelectItem>
-                    <SelectItem value="AB-">AB-</SelectItem>
-                  </SelectContent>
-                </Select>
-              </form>
+              <ProfileForm />
             </CardContent>
             <CardFooter className="border-t px-6 py-4">
-              <Button variant="secondary" disabled>
+              <Button type="submit" form="profile">
                 Save
               </Button>
             </CardFooter>
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Course Details</CardTitle>
+              <CardTitle>Identification Details</CardTitle>
               <CardDescription>
-                Information related to your enrolled course and subjects.
+                Information related to your government IDs.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form className="flex flex-col gap-4">
-                <Input
-                  placeholder="Project Name"
-                  defaultValue="M.Tech (Electronic Systems)"
-                />
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="include" defaultChecked />
-                  <label
-                    htmlFor="include"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    Details
-                  </label>
-                </div>
-              </form>
+              <IdentificationForm />
             </CardContent>
             <CardFooter className="border-t px-6 py-4">
-              <Button>Save</Button>
+              <Button type="submit" form="identification">
+                Save
+              </Button>
+            </CardFooter>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Contact Details</CardTitle>
+              <CardDescription>
+                Your relevant phone number and email for contacting purposes.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ContactForm />
+            </CardContent>
+            <CardFooter className="border-t px-6 py-4">
+              <Button type="submit" form="contact">
+                Save
+              </Button>
+            </CardFooter>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Change Password</CardTitle>
+              <CardDescription>
+                Securely update your password here.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ChangePassword />
+            </CardContent>
+            <CardFooter className="border-t px-6 py-4">
+              <Button type="submit" form="password">
+                Change Password
+              </Button>
             </CardFooter>
           </Card>
         </div>
