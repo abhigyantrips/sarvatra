@@ -1,0 +1,94 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id Int [pk, increment]
+  email String [unique, not null]
+  phoneNo String [unique, not null]
+  aadharNo String [unique]
+  panNo String [unique]
+  icNo String [unique]
+  rank String
+  firstName String [not null]
+  lastName String [not null]
+  role Role [not null, default: 'STUDENT']
+  courses Course [not null]
+  testResults Result [not null]
+  testsGraded Result [not null]
+  tokens Token [not null]
+}
+
+Table Token {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  valid Boolean [not null, default: true]
+  expiration DateTime [not null]
+  user User [not null]
+  userId Int [not null]
+}
+
+Table Course {
+  id Int [pk, increment]
+  name String [not null]
+  semesters Int [not null]
+  credits Int [not null]
+  total Int [not null]
+  subjects Subject [not null]
+  User User
+  userId Int
+}
+
+Table Subject {
+  id Int [pk, increment]
+  subjectCode String [unique, not null]
+  semester Int [not null]
+  courseId Int [not null]
+  course Course [not null]
+  Result Result [not null]
+}
+
+Table Result {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  PH1 Int
+  PH2 Int
+  assignment Int
+  IA Int
+  finals Int
+  overall Int
+  letterGrade String [not null]
+  digitalGrade Int
+  CixGi Int
+  subjectId Int [not null]
+  studentId Int [not null]
+  graderId Int
+  subject Subject [not null]
+  student User [not null]
+  gradedBy User
+}
+
+Enum Role {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+Enum LetterGrade {
+  A0
+  AP
+}
+
+Ref: Token.userId > User.id
+
+Ref: Course.userId > User.id
+
+Ref: Subject.courseId > Course.id
+
+Ref: Result.subjectId > Subject.id
+
+Ref: Result.studentId > User.id [delete: Cascade]
+
+Ref: Result.graderId > User.id [delete: Cascade]

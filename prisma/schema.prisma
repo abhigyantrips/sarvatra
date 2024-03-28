@@ -5,28 +5,98 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator dbml {
+  provider            = "prisma-dbml-generator"
+  projectDatabaseType = "PostgreSQL"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email     String   @unique
-  name      String?
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  phoneNo   String  @unique
+  aadharNo  String? @unique
+  panNo     String? @unique
+  icNo      String? @unique
+  rank      String?
+  firstName String  @db.VarChar(255)
+  lastName  String  @db.VarChar(255)
+  role      Role    @default(STUDENT)
+
+  // Relation fields
+  courses     Course[]
+  testResults Result[] @relation(name: "results")
+  testsGraded Result[] @relation(name: "graded")
+  tokens      Token[]
+}
+
+model Token {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  valid      Boolean  @default(true)
+  expiration DateTime
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
 }
 
 model Course {
-  id        Int    @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
   semesters Int
   credits   Int
   total     Int
+  subjects  Subject[]
+  User      User?     @relation(fields: [userId], references: [id])
+  userId    Int?
 }
 
 model Subject {
-  id       Int @id @default(autoincrement())
-  semester Int
+  id          Int    @id @default(autoincrement())
+  subjectCode String @unique
+  semester    Int
+
+  // Relation Fields
+  courseId Int
+  course   Course   @relation(fields: [courseId], references: [id])
+  Result   Result[]
+}
+
+model Result {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  PH1          Int?
+  PH2          Int?
+  assignment   Int?
+  IA           Int?
+  finals       Int?
+  overall      Int?
+  letterGrade  String @db.VarChar(4)
+  digitalGrade Int?
+  CixGi        Int?
+
+  // Relation fields
+  subjectId Int
+  studentId Int
+  graderId  Int?
+  subject   Subject @relation(fields: [subjectId], references: [id])
+  student   User    @relation(name: "results", fields: [studentId], references: [id], onDelete: Cascade)
+  gradedBy  User?   @relation(name: "graded", fields: [graderId], references: [id], onDelete: SetNull)
+}
+
+enum Role {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+enum LetterGrade {
+  A0
+  AP
 }
