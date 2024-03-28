@@ -1,6 +1,21 @@
+'use client';
+
 import { CalendarIcon } from 'lucide-react';
 import { Calendar } from 'lucide-react';
 
+import { useRouter } from 'next/navigation';
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -31,15 +46,45 @@ import { IdentificationForm } from './id-form';
 import { ProfileForm } from './profile-form';
 
 export default function Profile() {
+  const router = useRouter();
+
   return (
     <div className="space-y-6 py-10">
-      <div className="space-y-0.5 border-b pb-6">
-        <h2 className="text-2xl tracking-tight">
-          Jai Hind, <span className="font-bold">Lt. Col. Vivek</span>
-        </h2>
-        <p className="text-muted-foreground">
-          Manage your profile details and other information here.
-        </p>
+      <div className="flex flex-row justify-between space-y-0.5 border-b pb-6">
+        <div>
+          <h2 className="text-2xl tracking-tight">
+            Jai Hind, <span className="font-bold">Lt. Col. Vivek</span>
+          </h2>
+          <p className="text-muted-foreground">
+            Manage your profile details and other information here.
+          </p>
+        </div>
+        <AlertDialog>
+          <AlertDialogTrigger>
+            <Button variant="outline">Log Out</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Are you sure you want to log out?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                You changes will be saved, but you will have to log in again to
+                use the portal.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  router.push('/');
+                }}
+              >
+                Log Out
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
       <div className="grid items-start gap-6">
         <div className="grid gap-6">
