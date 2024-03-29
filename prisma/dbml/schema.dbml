@@ -13,7 +13,7 @@ Table User {
   firstName String [not null]
   lastName String [not null]
   role Role [not null, default: 'STUDENT']
-  courses Course [not null]
+  courses CourseEnrollment [not null]
   testResults Result [not null]
   testsGraded Result [not null]
   tokens Token [not null]
@@ -25,19 +25,19 @@ Table Token {
   updatedAt DateTime [not null]
   valid Boolean [not null, default: true]
   expiration DateTime [not null]
-  user User [not null]
   userId Int [not null]
+  user User [not null]
 }
 
 Table Course {
   id Int [pk, increment]
+  courseCode String [unique, not null]
   name String [not null]
   semesters Int [not null]
   credits Int [not null]
   total Int [not null]
+  members CourseEnrollment [not null]
   subjects Subject [not null]
-  User User
-  userId Int
 }
 
 Table Subject {
@@ -47,6 +47,19 @@ Table Subject {
   courseId Int [not null]
   course Course [not null]
   Result Result [not null]
+}
+
+Table CourseEnrollment {
+  createdAt DateTime [default: `now()`, not null]
+  role Role [not null]
+  userId Int [not null]
+  courseId Int [not null]
+  User User [not null]
+  Course Course [not null]
+
+  indexes {
+    (userId, courseId) [pk]
+  }
 }
 
 Table Result {
@@ -59,7 +72,7 @@ Table Result {
   IA Int
   finals Int
   overall Int
-  letterGrade String [not null]
+  letterGrade LetterGrade [not null]
   digitalGrade Int
   CixGi Int
   subjectId Int [not null]
@@ -77,17 +90,27 @@ Enum Role {
 }
 
 Enum LetterGrade {
-  A0
   AP
+  AO
+  AM
+  BP
+  BO
+  BM
+  CP
+  CO
+  CM
+  F
 }
 
 Ref: Token.userId > User.id
 
-Ref: Course.userId > User.id
+Ref: Subject.courseId > Course.id [delete: Cascade]
 
-Ref: Subject.courseId > Course.id
+Ref: CourseEnrollment.userId > User.id
 
-Ref: Result.subjectId > Subject.id
+Ref: CourseEnrollment.courseId > Course.id
+
+Ref: Result.subjectId > Subject.id [delete: Cascade]
 
 Ref: Result.studentId > User.id [delete: Cascade]
 
