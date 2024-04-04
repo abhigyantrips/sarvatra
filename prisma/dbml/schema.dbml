@@ -13,6 +13,7 @@ Table User {
   firstName String [not null]
   lastName String [not null]
   role Role [not null, default: 'STUDENT']
+  password String [not null]
   courses CourseEnrollment [not null]
   testResults Result [not null]
   testsGraded Result [not null]

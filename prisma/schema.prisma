@@ -26,6 +26,7 @@ model User {
   firstName String  @db.VarChar(255)
   lastName  String  @db.VarChar(255)
   role      Role    @default(STUDENT)
+  password  String
 
   // Relation fields
   courses     CourseEnrollment[]
