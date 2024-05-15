@@ -32,7 +32,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 const loginSchema = y.object().shape({
   type: y
     .string()
-    .oneOf(['student', 'instructor', 'admin'])
+    .oneOf(['STUDENT', 'TEACHER', 'ADMIN'])
     .required('This field is required'),
   id: y.string().required('This field is required'),
   password: y.string().required('This field is required'),
@@ -44,7 +44,7 @@ export default function Login() {
   const form = useForm<y.InferType<typeof loginSchema>>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
-      type: 'student',
+      type: 'STUDENT',
       id: '',
       password: '',
     },
@@ -53,7 +53,7 @@ export default function Login() {
   async function onSubmit(values: y.InferType<typeof loginSchema>) {
     setLoading(true);
     try {
-      await signIn(values.id, values.password);
+      await signIn(values.id, values.password, values.type);
       toast.success('Login successful.');
     } catch (e) {
       setLoading(false);
@@ -88,7 +88,7 @@ export default function Login() {
                     >
                       <div>
                         <RadioGroupItem
-                          value="student"
+                          value="STUDENT"
                           id="student"
                           className="peer sr-only"
                         />
@@ -102,7 +102,7 @@ export default function Login() {
                       </div>
                       <div>
                         <RadioGroupItem
-                          value="instructor"
+                          value="TEACHER"
                           id="instructor"
                           className="peer sr-only"
                         />
@@ -116,7 +116,7 @@ export default function Login() {
                       </div>
                       <div>
                         <RadioGroupItem
-                          value="admin"
+                          value="ADMIN"
                           id="admin"
                           className="peer sr-only"
                         />

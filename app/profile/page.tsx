@@ -1,7 +1,7 @@
 'use client';
 
-import { CalendarIcon } from 'lucide-react';
-import { Calendar } from 'lucide-react';
+import { signOut } from 'next-auth/react';
+import { toast } from 'sonner';
 
 import { useRouter } from 'next/navigation';
 
@@ -25,20 +25,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 
 import { ChangePassword } from './change-password';
 import { ContactForm } from './contact-form';
@@ -77,7 +63,8 @@ export default function Profile() {
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
                 onClick={() => {
-                  router.push('/');
+                  signOut({ callbackUrl: '/', redirect: true });
+                  toast.loading('Logging you out...');
                 }}
               >
                 Log Out
