@@ -7,10 +7,11 @@ import { cn } from '@/lib/utils';
 
 import { SiteHeader } from '@/components/site-header';
 import { TailwindIndicator } from '@/components/tailwind-indicator';
-import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 
 import '@/styles/globals.css';
+
+import { Providers } from '@/app/providers';
 
 export const metadata: Metadata = {
   title: {
@@ -45,12 +46,12 @@ export default function RootLayout({
           fontMono.variable
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <Providers>
           <SiteHeader />
           <div className="container flex-1">{children}</div>
           <TailwindIndicator />
           <Toaster />
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

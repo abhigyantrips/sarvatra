@@ -13,7 +13,7 @@ import * as y from 'yup';
 
 import { useState } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { signIn } from '@/lib/sign-in';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -40,7 +40,6 @@ const loginSchema = y.object().shape({
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const form = useForm<y.InferType<typeof loginSchema>>({
     resolver: yupResolver(loginSchema),
@@ -51,22 +50,17 @@ export default function Login() {
     },
   });
 
-  function onSubmit(values: y.InferType<typeof loginSchema>) {
+  async function onSubmit(values: y.InferType<typeof loginSchema>) {
     setLoading(true);
-    setTimeout(() => {
-      if (
-        values.id === process.env.NEXT_PUBLIC_TEST_ID &&
-        values.password === process.env.NEXT_PUBLIC_TEST_PASSWORD
-      ) {
-        router.push('/profile');
-        toast.success('Login successful.');
-      } else {
-        setLoading(false);
-        toast.error('Something went wrong!', {
-          description: 'The ID/password you entered is incorrect',
-        });
-      }
-    }, 4000);
+    try {
+      await signIn(values.id, values.password);
+      toast.success('Login successful.');
+    } catch (e) {
+      setLoading(false);
+      toast.error('Something went wrong!', {
+        description: 'The ID/password you entered is incorrect',
+      });
+    }
   }
 
   return (
