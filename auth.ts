@@ -1,3 +1,4 @@
+import { Role } from '@prisma/client';
 import { compare } from 'bcryptjs';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
@@ -16,11 +17,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           type: 'password',
           required: true,
         },
+        role: {
+          type: 'text',
+          required: true,
+        },
       },
       async authorize(credentials) {
         const user = await db.user.findUnique({
           where: {
             icNo: credentials.icNo as string,
+            role: credentials.role as unknown as Role,
           },
         });
 
@@ -33,7 +39,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           user.password
         );
 
-        if (!isPasswordValid) {
+        if (!isPasswordValid || !(user.role === credentials.role)) {
           return null;
         }
 
@@ -47,5 +53,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   pages: {
     signIn: '/',
+  },
+  callbacks: {
+    session({ session, user }) {
+      session.user.id = user.id;
+      return session;
+    },
   },
 });
