@@ -39,10 +39,24 @@ export function SiteHeader() {
           {siteConfig.title}
         </h1>
         {pathname !== '/' && (
-          <div className="flex gap-4 pl-8">
-            <p>Results</p>
-            <p>Courses</p>
-            <p>Students</p>
+          <div className="flex space-x-6 pl-8 text-sm font-medium">
+            {siteConfig.navLinks.map(
+              (item, index) =>
+                item.href && (
+                  <Link
+                    key={index}
+                    href={item.href}
+                    className={cn(
+                      'transition-colors hover:text-foreground/80',
+                      pathname === item.href
+                        ? 'text-foreground'
+                        : 'text-foreground/60'
+                    )}
+                  >
+                    {item.title}
+                  </Link>
+                )
+            )}
           </div>
         )}
       </div>
