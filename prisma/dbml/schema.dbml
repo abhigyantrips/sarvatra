@@ -4,14 +4,14 @@
 
 Table User {
   id Int [pk, increment]
-  email String [unique, not null]
-  phoneNo String [unique, not null]
+  email String [unique]
+  phoneNo String [unique]
   aadharNo String [unique]
   panNo String [unique]
-  icNo String [unique]
+  icNo String [unique, not null]
   rank String
   firstName String [not null]
-  lastName String [not null]
+  lastName String
   role Role [not null, default: 'STUDENT']
   password String [not null]
   courses CourseEnrollment [not null]
