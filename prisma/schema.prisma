@@ -29,19 +29,6 @@ model User {
   courses     CourseEnrollment[]
   testResults Result[]           @relation(name: "results")
   testsGraded Result[]           @relation(name: "graded")
-  tokens      Token[]
-}
-
-model Token {
-  id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  valid      Boolean  @default(true)
-  expiration DateTime
-
-  // Relation fields
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
 }
 
 model Course {
@@ -63,6 +50,7 @@ model Course {
 model Subject {
   id          Int    @id @default(autoincrement())
   subjectCode String @unique
+  name        String @default("")
   semester    Int
 
   // Relation Fields
