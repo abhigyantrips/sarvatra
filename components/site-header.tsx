@@ -43,10 +43,13 @@ export function SiteHeader() {
             {siteConfig.navLinks.map(
               (item, index) =>
                 item.href && (
-                  <Button variant="ghost" className="rounded-full" asChild>
-                    <Link key={index} href={item.href}>
-                      {item.title}
-                    </Link>
+                  <Button
+                    key={index}
+                    variant="ghost"
+                    className="rounded-full"
+                    asChild
+                  >
+                    <Link href={item.href}>{item.title}</Link>
                   </Button>
                 )
             )}
