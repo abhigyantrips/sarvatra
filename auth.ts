@@ -5,7 +5,10 @@ import Credentials from 'next-auth/providers/credentials';
 
 import { db } from '@/lib/db';
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const { auth, handlers, signIn, signOut } = NextAuth({
+  session: {
+    strategy: 'jwt',
+  },
   providers: [
     Credentials({
       credentials: {
@@ -44,8 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         return {
-          id: user.id + '',
-          icNo: user.icNo,
+          id: user.icNo as string,
           role: user.role,
         };
       },
@@ -55,9 +57,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: '/',
   },
   callbacks: {
-    session({ session, user }) {
-      session.user.id = user.id;
-      return session;
+    session({ session, token }) {
+      return { ...session, ...token };
+    },
+    jwt({ token, user }) {
+      if (user) {
+        const u = user as unknown as any;
+        return {
+          ...token,
+          id: u.id,
+        };
+      }
+      return token;
     },
   },
 });
