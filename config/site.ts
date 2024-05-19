@@ -19,8 +19,13 @@ export const siteConfig = {
       requiredRoles: ['TEACHER', 'ADMIN'],
     },
     {
-      title: 'Students',
-      href: '/students',
+      title: 'Subjects',
+      href: '/subjects',
+      requiredRoles: ['TEACHER', 'ADMIN'],
+    },
+    {
+      title: 'Users',
+      href: '/users',
       requiredRoles: ['ADMIN'],
     },
   ] satisfies NavItem[],
