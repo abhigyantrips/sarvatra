@@ -4,10 +4,23 @@ import { Plus } from 'lucide-react';
 
 import Link from 'next/link';
 
+import { db } from '@/lib/db';
+
 import { Button } from '@/components/ui/button';
+import { DataTable } from '@/components/ui/data-table';
 import { Input } from '@/components/ui/input';
 
-export default function Users() {
+import { columns } from '@/app/subjects/columns';
+
+async function getSubjects() {
+  const subjects = await db.subject.findMany({});
+
+  return subjects;
+}
+
+export default async function Subjects() {
+  const subjects = await getSubjects();
+
   return (
     <div className="space-y-6 py-10">
       <div className="flex flex-row items-center justify-between space-y-0.5 border-b pb-6">
@@ -22,6 +35,7 @@ export default function Users() {
           </Link>
         </Button>
       </div>
+      <DataTable columns={columns} data={subjects} />
     </div>
   );
 }

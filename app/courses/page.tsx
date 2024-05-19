@@ -1,13 +1,24 @@
-'use client';
-
 import { Plus } from 'lucide-react';
 
 import Link from 'next/link';
 
+import { db } from '@/lib/db';
+
 import { Button } from '@/components/ui/button';
+import { DataTable } from '@/components/ui/data-table';
 import { Input } from '@/components/ui/input';
 
-export default function Courses() {
+import { columns } from '@/app/courses/columns';
+
+async function getCourses() {
+  const courses = await db.course.findMany({});
+
+  return courses;
+}
+
+export default async function Courses() {
+  const courses = await getCourses();
+
   return (
     <div className="space-y-6 py-10">
       <div className="flex flex-row items-center justify-between space-y-0.5 border-b pb-6">
@@ -22,6 +33,7 @@ export default function Courses() {
           </Link>
         </Button>
       </div>
+      <DataTable columns={columns} data={courses} />
     </div>
   );
 }
