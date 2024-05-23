@@ -18,13 +18,17 @@ export async function postResult(user: User, subject: Subject, values: any) {
       PH1: values.PH1,
       PH2: values.PH2,
       assignment: values.assignment,
+      IA: values.PH1 + values.PH2 + values.assignment,
       finals: values.finals,
+      overall: values.PH1 + values.PH2 + values.assignment + values.finals,
     },
     update: {
       PH1: values.PH1,
       PH2: values.PH2,
       assignment: values.assignment,
+      IA: values.PH1 + values.PH2 + values.assignment,
       finals: values.finals,
+      overall: values.PH1 + values.PH2 + values.assignment + values.finals,
     },
   });
 
