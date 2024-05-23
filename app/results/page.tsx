@@ -1,6 +1,7 @@
 'use client';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Subject, User } from '@prisma/client';
 import { Save, Search } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -10,6 +11,9 @@ import { useEffect, useState } from 'react';
 
 import { db } from '@/lib/db';
 import { fetchResults } from '@/lib/fetchResults';
+import { fetchSubject } from '@/lib/fetchSubject';
+import { fetchUser } from '@/lib/fetchUser';
+import { postResult } from '@/lib/postResult';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -27,23 +31,69 @@ const searchFormSchema = y.object().shape({
   subject: y.string().required('This field is required'),
 });
 
+const marksFormSchema = y.object().shape({
+  PH1: y
+    .number()
+    .min(0, 'Between 0 and 20')
+    .max(20, 'Between 0 and 20')
+    .optional(),
+  PH2: y
+    .number()
+    .min(0, 'Between 0 and 20')
+    .max(20, 'Between 0 and 20')
+    .optional(),
+  assignment: y
+    .number()
+    .min(0, 'Between 0 and 10')
+    .max(10, 'Between 0 and 10')
+    .optional(),
+  finals: y
+    .number()
+    .min(0, 'Between 0 and 50')
+    .max(50, 'Between 0 and 50')
+    .optional(),
+});
+
 export default function Results() {
-  const [users, setUsers] = useState([]);
-  const [subjects, setSubjects] = useState([]);
+  const [user, setUser] = useState({} as User);
+  const [subject, setSubject] = useState({} as Subject);
   const [showMarks, setShowMarks] = useState(false);
   const searchForm = useForm<y.InferType<typeof searchFormSchema>>({
     resolver: yupResolver(searchFormSchema),
   });
+  const marksForm = useForm<y.InferType<typeof marksFormSchema>>({
+    resolver: yupResolver(marksFormSchema),
+  });
 
   async function onSearchSubmit(values: y.InferType<typeof searchFormSchema>) {
     setShowMarks(false);
+    marksForm.reset();
     const result = await fetchResults(values);
 
     if (result) {
+      const dbUser = (await fetchUser(result.icNo)) ?? ({} as User);
+      setUser(dbUser);
+
+      const dbSubject = (await fetchSubject(values.subject)) ?? ({} as Subject);
+      setSubject(dbSubject);
+
       setShowMarks(true);
-      toast.success('Found something!');
+      toast.success('Student profile loaded successfully.');
     } else {
-      toast.error('Did not find something.');
+      toast.error('Could not fetch the given user/subject.', {
+        description:
+          'The student might not be attending the specified subject.',
+      });
+    }
+  }
+
+  async function onMarksSubmit(values: y.InferType<typeof marksFormSchema>) {
+    const result = await postResult(user, subject, values);
+
+    if (result) {
+      toast.success('Result uploaded successfully.');
+    } else {
+      toast.error('There was an error.');
     }
   }
 
@@ -88,7 +138,73 @@ export default function Results() {
           </Button>
         </form>
       </Form>
-      {showMarks && <div></div>}
+      {showMarks && (
+        <Form {...marksForm}>
+          <form
+            id="marksForm"
+            autoComplete="off"
+            onSubmit={marksForm.handleSubmit(onMarksSubmit)}
+            className="grid grid-cols-5 items-end gap-3 border-b pb-6"
+          >
+            <FormField
+              control={marksForm.control}
+              name="PH1"
+              render={({ field }) => (
+                <FormItem className="col-span-1">
+                  <FormLabel>PH1 (20)</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={marksForm.control}
+              name="PH2"
+              render={({ field }) => (
+                <FormItem className="col-span-1">
+                  <FormLabel>PH2 (20)</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={marksForm.control}
+              name="assignment"
+              render={({ field }) => (
+                <FormItem className="col-span-1">
+                  <FormLabel>Assignment (10)</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={marksForm.control}
+              name="finals"
+              render={({ field }) => (
+                <FormItem className="col-span-1">
+                  <FormLabel>Finals (50)</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="col-span-1" variant="outline">
+              <Save className="mr-2 h-5 w-5" />
+              Save
+            </Button>
+          </form>
+        </Form>
+      )}
     </div>
   );
 }
