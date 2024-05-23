@@ -75,7 +75,6 @@ model CourseEnrollment {
 }
 
 model Result {
-  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -85,7 +84,7 @@ model Result {
   IA           Int?
   finals       Int?
   overall      Int?
-  letterGrade  LetterGrade
+  letterGrade  LetterGrade?
   digitalGrade Int?
   CixGi        Int?
 
@@ -96,6 +95,8 @@ model Result {
   subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
   student   User    @relation(name: "results", fields: [studentId], references: [id], onDelete: Cascade)
   gradedBy  User?   @relation(name: "graded", fields: [graderId], references: [id], onDelete: SetNull)
+
+  @@id(name: "resultId", [studentId, subjectId])
 }
 
 enum Role {
