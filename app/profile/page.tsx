@@ -32,8 +32,6 @@ import { IdentificationForm } from './id-form';
 import { ProfileForm } from './profile-form';
 
 export default function Profile() {
-  const router = useRouter();
-
   return (
     <div className="space-y-6 py-10">
       <div className="flex flex-row justify-between space-y-0.5 border-b pb-6">

@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as y from 'yup';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { db } from '@/lib/db';
 import { fetchResults } from '@/lib/fetchResults';
@@ -63,6 +63,12 @@ export default function Results() {
   });
   const marksForm = useForm<y.InferType<typeof marksFormSchema>>({
     resolver: yupResolver(marksFormSchema),
+    defaultValues: {
+      PH1: 0,
+      PH2: 0,
+      assignment: 0,
+      finals: 0,
+    },
   });
 
   async function onSearchSubmit(values: y.InferType<typeof searchFormSchema>) {
@@ -138,6 +144,20 @@ export default function Results() {
           </Button>
         </form>
       </Form>
+      {showMarks && (
+        <div className="flex flex-col items-start gap-3 border-b pb-6">
+          <h2 className="text-md">
+            <span className="font-bold">Name: </span>
+            {user.rank ? `${user.rank} ` : ''}
+            {`${user.firstName} `}
+            {user.lastName ? `${user.lastName} ` : ''}
+          </h2>
+          <h2 className="text-md">
+            <span className="font-bold">Subject: </span>
+            {`(${subject.subjectCode}) ${subject.name}`}
+          </h2>
+        </div>
+      )}
       {showMarks && (
         <Form {...marksForm}>
           <form
