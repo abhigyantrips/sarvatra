@@ -9,9 +9,9 @@ export const siteConfig = {
     'A fully automated grading system for the officers of CME, Pune.',
   navLinks: [
     {
-      title: 'Results',
-      href: '/results',
-      requiredRoles: ['STUDENT', 'TEACHER', 'ADMIN'],
+      title: 'Marksheets',
+      href: '/marksheets',
+      requiredRoles: ['TEACHER', 'ADMIN'],
     },
     {
       title: 'Courses',
@@ -21,6 +21,11 @@ export const siteConfig = {
     {
       title: 'Subjects',
       href: '/subjects',
+      requiredRoles: ['TEACHER', 'ADMIN'],
+    },
+    {
+      title: 'Results',
+      href: '/results',
       requiredRoles: ['TEACHER', 'ADMIN'],
     },
     {
