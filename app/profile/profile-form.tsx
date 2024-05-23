@@ -117,7 +117,7 @@ export function ProfileForm() {
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
-                      variant={'outline'}
+                      variant="outline"
                       className={cn(
                         'col-span-1 pl-3 text-left',
                         !field.value && 'text-muted-foreground'

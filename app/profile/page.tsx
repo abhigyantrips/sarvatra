@@ -46,7 +46,7 @@ export default function Profile() {
           </p>
         </div>
         <AlertDialog>
-          <AlertDialogTrigger>
+          <AlertDialogTrigger asChild>
             <Button variant="outline">Log Out</Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
