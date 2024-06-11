@@ -72,7 +72,14 @@ export default function Marksheets() {
           </Button>
         </form>
       </Form>
-      {showTable && <DataTable columns={columns} data={marksheet} />}
+      {showTable && (
+        <DataTable
+          columns={columns}
+          data={marksheet}
+          type="marksheet"
+          toolbar={false}
+        />
+      )}
     </div>
   );
 }

@@ -9,7 +9,10 @@ export const columns: ColumnDef<User>[] = [
     header: 'IC Number',
   },
   {
-    accessorKey: 'rank',
+    id: 'rank',
+    accessorFn: (row) => {
+      row.rank ? `${row.rank}` : '-';
+    },
     header: 'Rank',
   },
   {

@@ -1,16 +1,21 @@
 'use client';
 
-import type { Subject } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import type { ColumnDef } from '@tanstack/react-table';
 
-export const columns: ColumnDef<Subject>[] = [
+type SubjectWithCourse = Prisma.SubjectGetPayload<{
+  include: { course: true };
+}>;
+
+export const columns: ColumnDef<SubjectWithCourse>[] = [
   {
-    accessorKey: 'subjectCode',
-    header: 'Code',
+    id: 'courseCode',
+    accessorFn: (row) => `${row.course.courseCode}`,
+    header: 'Course Code',
   },
   {
-    accessorKey: 'courseId',
-    header: 'Course ID',
+    accessorKey: 'subjectCode',
+    header: 'Subject Code',
   },
   {
     accessorKey: 'name',
@@ -19,9 +24,5 @@ export const columns: ColumnDef<Subject>[] = [
   {
     accessorKey: 'semester',
     header: 'Semester',
-  },
-  {
-    accessorKey: 'credits',
-    header: 'Credits',
   },
 ];

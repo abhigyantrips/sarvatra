@@ -19,21 +19,5 @@ async function getCourses() {
 export default async function Courses() {
   const courses = await getCourses();
 
-  return (
-    <div className="space-y-6 py-10">
-      <div className="flex flex-row items-center justify-between space-y-0.5 border-b pb-6">
-        <Input
-          className="max-w-sm"
-          placeholder="Search and filter courses..."
-        />
-        <Button variant="outline" asChild>
-          <Link href="/subjects/add">
-            <Plus className="mr-2 h-5 w-5" />
-            Add Course
-          </Link>
-        </Button>
-      </div>
-      <DataTable columns={columns} data={courses} />
-    </div>
-  );
+  return <DataTable columns={columns} data={courses} type="course" toolbar />;
 }
