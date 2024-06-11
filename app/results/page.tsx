@@ -9,7 +9,6 @@ import * as y from 'yup';
 
 import { useState } from 'react';
 
-import { db } from '@/lib/db';
 import { fetchResults } from '@/lib/fetchResults';
 import { fetchSubject } from '@/lib/fetchSubject';
 import { fetchUser } from '@/lib/fetchUser';

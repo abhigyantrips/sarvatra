@@ -14,7 +14,7 @@ import { ThemeSwitcher } from '@/components/theme-switcher';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 
-export function SiteHeader() {
+export function SiteHeader({ role }: { role: string }) {
   const pathname = usePathname();
 
   return (
@@ -42,7 +42,8 @@ export function SiteHeader() {
           <div className="flex space-x-2 pl-4 text-sm font-medium">
             {siteConfig.navLinks.map(
               (item, index) =>
-                item.href && (
+                item.href &&
+                item.requiredRoles.includes(role) && (
                   <Button
                     key={index}
                     variant="ghost"

@@ -3,8 +3,6 @@
 import { signOut } from 'next-auth/react';
 import { toast } from 'sonner';
 
-import { useRouter } from 'next/navigation';
-
 import {
   AlertDialog,
   AlertDialogAction,

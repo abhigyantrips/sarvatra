@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import { siteConfig } from '@/config/site';
 
 import { fontMono, fontSans } from '@/lib/fonts';
+import { useCurrentRole } from '@/lib/use-current-role';
 import { cn } from '@/lib/utils';
 
 import { SiteHeader } from '@/components/site-header';
@@ -31,11 +32,13 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const role = await useCurrentRole();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
@@ -47,7 +50,7 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <SiteHeader />
+          <SiteHeader role={role ?? 'STUDENT'} />
           <div className="container flex-1">{children}</div>
           <TailwindIndicator />
           <Toaster />
