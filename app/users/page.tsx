@@ -5,7 +5,11 @@ import { DataTable } from '@/components/ui/data-table';
 import { columns } from '@/app/users/columns';
 
 async function getUsers() {
-  const users = await db.user.findMany({});
+  const users = await db.user.findMany({
+    orderBy: {
+      icNo: 'asc',
+    },
+  });
 
   return users;
 }

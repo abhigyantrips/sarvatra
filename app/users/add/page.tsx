@@ -7,6 +7,8 @@ import * as y from 'yup';
 
 import { useRouter } from 'next/navigation';
 
+import { db } from '@/lib/db';
+import { postUser } from '@/lib/postUser';
 import { generatePassword } from '@/lib/utils';
 
 import { Button } from '@/components/ui/button';
@@ -43,7 +45,9 @@ export default function AddUser() {
     resolver: yupResolver(addUserSchema),
   });
 
-  function onSubmit(values: y.InferType<typeof addUserSchema>) {
+  async function onSubmit(values: y.InferType<typeof addUserSchema>) {
+    await postUser(values);
+
     toast.success('User dialog accepted.');
     router.push('/users');
   }

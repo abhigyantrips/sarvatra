@@ -11,7 +11,7 @@ export const columns: ColumnDef<User>[] = [
   {
     id: 'rank',
     accessorFn: (row) => {
-      row.rank ? `${row.rank}` : '-';
+      return row.rank ? `${row.rank}` : '-';
     },
     header: 'Rank',
   },
