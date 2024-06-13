@@ -12,6 +12,11 @@ export async function fetchMarksheet(subjectCode: string) {
         subjectCode,
       },
     },
+    orderBy: {
+      student: {
+        firstName: 'asc',
+      },
+    },
   });
 
   return marksheet;
