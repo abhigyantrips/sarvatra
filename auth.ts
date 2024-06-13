@@ -9,6 +9,7 @@ declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      name: string;
       role: string;
     };
   }
@@ -57,6 +58,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
         return {
           id: user.icNo as string,
+          name: `${user.rank ? user.rank + ' ' : ''}${user.firstName} ${user.lastName}`,
           role: user.role as string,
         };
       },

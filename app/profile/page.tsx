@@ -1,6 +1,6 @@
 'use client';
 
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 
 import {
@@ -23,6 +23,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import { ChangePassword } from './change-password';
 import { ContactForm } from './contact-form';
@@ -30,13 +31,19 @@ import { IdentificationForm } from './id-form';
 import { ProfileForm } from './profile-form';
 
 export default function Profile() {
+  const { data: session, status } = useSession();
+
   return (
     <div className="space-y-6 py-10">
       <div className="flex flex-row justify-between space-y-0.5 border-b pb-6">
         <div>
-          <h2 className="text-2xl tracking-tight">
-            Jai Hind, <span className="font-bold">Lt. Col. Vivek</span>
-          </h2>
+          {status === 'authenticated' ? (
+            <h2 className="text-2xl tracking-tight">
+              Jai Hind, <span className="font-bold">{session?.user.name}</span>
+            </h2>
+          ) : (
+            <Skeleton className="my-1 h-6 w-[350px] leading-8" />
+          )}
           <p className="text-muted-foreground">
             Manage your profile details and other information here.
           </p>
