@@ -104,9 +104,9 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
                   onClick={() => {
-                    toast.info('Loading subjects in course...');
+                    toast.info('Loading subject marksheet...');
                     router.push(
-                      `/subjects?courseCode=${(row.original as unknown as any).courseCode}`
+                      `/marks?subjectCode=${(row.original as unknown as any).subjectCode}`
                     );
                   }}
                   className="cursor-pointer"

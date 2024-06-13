@@ -1,8 +1,7 @@
 import { db } from '@/lib/db';
 
-import { DataTable } from '@/components/ui/data-table';
-
 import { columns } from '@/app/subjects/columns';
+import { DataTable } from '@/app/subjects/data-table';
 
 async function getSubjects(courseCode: string) {
   const subjects = await db.subject.findMany({
