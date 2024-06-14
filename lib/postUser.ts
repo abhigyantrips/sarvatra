@@ -28,7 +28,6 @@ export async function postUser(values: any) {
       phoneNo: values.phoneNo,
       aadharNo: values.aadharNo,
       panNo: values.panNo,
-      icNo: values.icNo,
       rank: values.rank,
       firstName: values.firstName,
       lastName: values.lastName,
