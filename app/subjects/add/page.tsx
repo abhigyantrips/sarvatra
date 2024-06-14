@@ -7,7 +7,7 @@ import * as y from 'yup';
 
 import { useRouter } from 'next/navigation';
 
-import { generatePassword } from '@/lib/utils';
+import { postSubject } from '@/lib/postSubject';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -19,22 +19,25 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { PasswordInput } from '@/components/ui/password-input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const addSubjectSchema = y.object().shape({
-  email: y.string().email().optional(),
-  phoneNo: y.string().optional(),
-  aadharNo: y.string().optional(),
-  panNo: y.string().optional(),
-  icNo: y.string().required('This field is required'),
-  rank: y.string().optional(),
-  firstName: y.string().required('This field is required'),
-  lastName: y.string().optional(),
-  role: y
+  subjectCode: y.string().required('This field is required'),
+  name: y.string().required('This field is required'),
+  course: y
     .string()
-    .oneOf(['STUDENT', 'TEACHER', 'ADMIN'])
+    .oneOf(['MTech', 'EODE1', 'EODE2', 'TES1', 'TES2'])
     .required('This field is required'),
-  password: y.string().required('This field is required'),
+  semester: y
+    .number()
+    .transform((value) => (isNaN(value) ? undefined : value))
+    .required('This field is required'),
 });
 
 export default function AddSubject() {
@@ -43,7 +46,9 @@ export default function AddSubject() {
     resolver: yupResolver(addSubjectSchema),
   });
 
-  function onSubmit(values: y.InferType<typeof addSubjectSchema>) {
+  async function onSubmit(values: y.InferType<typeof addSubjectSchema>) {
+    await postSubject(values);
+
     toast.success('Subject dialog accepted.');
     router.push('/subjects');
   }
@@ -72,25 +77,12 @@ export default function AddSubject() {
           <div className="grid grid-cols-6 gap-3">
             <FormField
               control={form.control}
-              name="email"
+              name="name"
               render={({ field }) => (
-                <FormItem className="col-span-3">
-                  <FormLabel>Email</FormLabel>
+                <FormItem className="col-span-6">
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="user@example.com" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="phoneNo"
-              render={({ field }) => (
-                <FormItem className="col-span-3">
-                  <FormLabel>Phone Number</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="1234567890" />
+                    <Input {...field} placeholder="Soft Computing Techniques" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -100,12 +92,12 @@ export default function AddSubject() {
           <div className="grid grid-cols-6 gap-3">
             <FormField
               control={form.control}
-              name="icNo"
+              name="subjectCode"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>IC Number</FormLabel>
+                  <FormLabel>Subject Code</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="IC12345K" />
+                    <Input {...field} placeholder="MES204" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -113,106 +105,63 @@ export default function AddSubject() {
             />
             <FormField
               control={form.control}
-              name="aadharNo"
+              name="semester"
               render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <FormLabel>Aadhaar Number</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="123456789012" />
-                  </FormControl>
+                <FormItem className="col-span-1">
+                  <FormLabel>Semester</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value ? field.value.toString() : ''}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select..." />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="1">1</SelectItem>
+                      <SelectItem value="2">2</SelectItem>
+                      <SelectItem value="3">3</SelectItem>
+                      <SelectItem value="4">4</SelectItem>
+                      <SelectItem value="5">5</SelectItem>
+                      <SelectItem value="6">6</SelectItem>
+                      <SelectItem value="7">7</SelectItem>
+                      <SelectItem value="8">8</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="panNo"
-              render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <FormLabel>PAN Number</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="TYPOS1234L" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-6 gap-3">
-            <FormField
-              control={form.control}
-              name="rank"
-              render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <FormLabel>Rank</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Maj." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <FormLabel>First Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Ashok" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <FormLabel>Last Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Kumar" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-6 items-end gap-3">
-            <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <FormLabel>Role</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Student" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
+              name="course"
               render={({ field }) => (
                 <FormItem className="col-span-3">
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <PasswordInput {...field} placeholder="*************" />
-                  </FormControl>
+                  <FormLabel>Course</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select course" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="MTech">
+                        M.Tech - Energy Systems
+                      </SelectItem>
+                      <SelectItem value="EODE1">EODE - Electrical</SelectItem>
+                      <SelectItem value="EODE2">EODE - Civil</SelectItem>
+                      <SelectItem value="TES1">TES - Civil</SelectItem>
+                      <SelectItem value="TES2">TES - Mechanical</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button
-              type="button"
-              className="col-span-1"
-              onClick={() => form.setValue('password', generatePassword())}
-            >
-              Generate
-            </Button>
           </div>
         </form>
       </Form>
