@@ -13,15 +13,15 @@ export const columns: ColumnDef<Course>[] = [
     header: 'Name',
   },
   {
-    accessorKey: 'credits',
-    header: 'Credits',
-  },
-  {
     accessorKey: 'semesters',
     header: 'Semesters',
   },
   {
+    accessorKey: 'credits',
+    header: 'Credits',
+  },
+  {
     accessorKey: 'total',
-    header: 'Total',
+    header: 'Total (40 * Credits)',
   },
 ];

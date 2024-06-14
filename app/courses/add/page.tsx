@@ -7,7 +7,7 @@ import * as y from 'yup';
 
 import { useRouter } from 'next/navigation';
 
-import { generatePassword } from '@/lib/utils';
+import { postCourse } from '@/lib/postCourse';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -19,22 +19,18 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { PasswordInput } from '@/components/ui/password-input';
 
 const addCourseSchema = y.object().shape({
-  email: y.string().email().optional(),
-  phoneNo: y.string().optional(),
-  aadharNo: y.string().optional(),
-  panNo: y.string().optional(),
-  icNo: y.string().required('This field is required'),
-  rank: y.string().optional(),
-  firstName: y.string().required('This field is required'),
-  lastName: y.string().optional(),
-  role: y
-    .string()
-    .oneOf(['STUDENT', 'TEACHER', 'ADMIN'])
+  courseCode: y.string().required('This field is required'),
+  name: y.string().required('This field is required'),
+  semesters: y
+    .number()
+    .transform((value) => (isNaN(value) ? undefined : value))
     .required('This field is required'),
-  password: y.string().required('This field is required'),
+  credits: y
+    .number()
+    .transform((value) => (isNaN(value) ? undefined : value))
+    .required('This field is required'),
 });
 
 export default function AddCourse() {
@@ -43,7 +39,9 @@ export default function AddCourse() {
     resolver: yupResolver(addCourseSchema),
   });
 
-  function onSubmit(values: y.InferType<typeof addCourseSchema>) {
+  async function onSubmit(values: y.InferType<typeof addCourseSchema>) {
+    await postCourse(values);
+
     toast.success('Course dialog accepted.');
     router.push('/courses');
   }
@@ -72,25 +70,12 @@ export default function AddCourse() {
           <div className="grid grid-cols-6 gap-3">
             <FormField
               control={form.control}
-              name="email"
+              name="name"
               render={({ field }) => (
-                <FormItem className="col-span-3">
-                  <FormLabel>Email</FormLabel>
+                <FormItem className="col-span-6">
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="user@example.com" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="phoneNo"
-              render={({ field }) => (
-                <FormItem className="col-span-3">
-                  <FormLabel>Phone Number</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="1234567890" />
+                    <Input {...field} placeholder="Energy Systems" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -100,12 +85,12 @@ export default function AddCourse() {
           <div className="grid grid-cols-6 gap-3">
             <FormField
               control={form.control}
-              name="icNo"
+              name="courseCode"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>IC Number</FormLabel>
+                  <FormLabel>Course Code</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="IC12345K" />
+                    <Input {...field} placeholder="EODE" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -113,12 +98,12 @@ export default function AddCourse() {
             />
             <FormField
               control={form.control}
-              name="aadharNo"
+              name="semesters"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>Aadhaar Number</FormLabel>
+                  <FormLabel>Semesters</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="123456789012" />
+                    <Input {...field} placeholder="4" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -126,93 +111,17 @@ export default function AddCourse() {
             />
             <FormField
               control={form.control}
-              name="panNo"
+              name="credits"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>PAN Number</FormLabel>
+                  <FormLabel>Credits</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="TYPOS1234L" />
+                    <Input {...field} placeholder="40" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          </div>
-          <div className="grid grid-cols-6 gap-3">
-            <FormField
-              control={form.control}
-              name="rank"
-              render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <FormLabel>Rank</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Maj." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <FormLabel>First Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Ashok" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <FormLabel>Last Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Kumar" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-6 items-end gap-3">
-            <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <FormLabel>Role</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Student" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem className="col-span-3">
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <PasswordInput {...field} placeholder="*************" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="button"
-              className="col-span-1"
-              onClick={() => form.setValue('password', generatePassword())}
-            >
-              Generate
-            </Button>
           </div>
         </form>
       </Form>
