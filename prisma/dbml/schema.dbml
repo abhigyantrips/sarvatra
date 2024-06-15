@@ -14,9 +14,10 @@ Table User {
   lastName String
   role Role [not null, default: 'STUDENT']
   password String [not null]
-  courses CourseEnrollment [not null]
   testResults Result [not null]
   testsGraded Result [not null]
+  course Course
+  courseId Int
 }
 
 Table Course {
@@ -26,8 +27,8 @@ Table Course {
   semesters Int [not null]
   credits Int [not null]
   total Int [not null]
-  members CourseEnrollment [not null]
   subjects Subject [not null]
+  students User [not null]
 }
 
 Table Subject {
@@ -35,22 +36,9 @@ Table Subject {
   subjectCode String [unique, not null]
   name String [not null, default: '']
   semester Int [not null]
-  courseId Int [not null]
-  course Course [not null]
-  Result Result [not null]
-}
-
-Table CourseEnrollment {
-  createdAt DateTime [default: `now()`, not null]
-  role Role [not null]
-  userId Int [not null]
-  courseId Int [not null]
-  User User [not null]
-  Course Course [not null]
-
-  indexes {
-    (userId, courseId) [pk]
-  }
+  credits Int [not null]
+  courses Course [not null]
+  results Result [not null]
 }
 
 Table Result {
@@ -77,6 +65,11 @@ Table Result {
   }
 }
 
+Table CourseToSubject {
+  subjectsId Int [ref: > Subject.id]
+  coursesId Int [ref: > Course.id]
+}
+
 Enum Role {
   STUDENT
   TEACHER
@@ -96,11 +89,7 @@ Enum LetterGrade {
   F
 }
 
-Ref: Subject.courseId > Course.id [delete: Cascade]
-
-Ref: CourseEnrollment.userId > User.id
-
-Ref: CourseEnrollment.courseId > Course.id
+Ref: User.courseId > Course.id
 
 Ref: Result.subjectId > Subject.id [delete: Cascade]
 

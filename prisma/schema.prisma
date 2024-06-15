@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 generator dbml {
@@ -26,9 +27,10 @@ model User {
   password  String
 
   // Relation fields
-  courses     CourseEnrollment[]
-  testResults Result[]           @relation(name: "results")
-  testsGraded Result[]           @relation(name: "graded")
+  testResults Result[] @relation(name: "results")
+  testsGraded Result[] @relation(name: "graded")
+  course      Course?  @relation(fields: [courseId], references: [id])
+  courseId    Int?
 }
 
 model Course {
@@ -41,8 +43,8 @@ model Course {
   total      Int
 
   // Relation fields
-  members  CourseEnrollment[]
   subjects Subject[]
+  students User[]
 
   @@index([courseCode])
 }
@@ -52,26 +54,13 @@ model Subject {
   subjectCode String @unique
   name        String @default("")
   semester    Int
+  credits     Int
 
   // Relation Fields
-  courseId Int
-  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  Result   Result[]
+  courses Course[]
+  results Result[]
 
   @@index([subjectCode])
-}
-
-model CourseEnrollment {
-  createdAt DateTime @default(now())
-  role      Role
-
-  // Relation fields
-  userId   Int
-  courseId Int
-  User     User   @relation(fields: [userId], references: [id])
-  Course   Course @relation(fields: [courseId], references: [id])
-
-  @@id([userId, courseId])
 }
 
 model Result {
