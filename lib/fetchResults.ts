@@ -1,24 +1,42 @@
 'use server';
 
-import { db } from './db';
+import { Subject } from '@prisma/client';
 
-export async function fetchResults(values: any) {
-  const result = await db.user.findUnique({
+import { db } from '@/lib/db';
+
+export async function fetchResults(subject?: Subject) {
+  if (!subject) return [];
+
+  const results = await db.user.findMany({
+    include: {
+      course: true,
+      testResults: true,
+    },
     where: {
-      icNo: values.icNo,
-      courses: {
-        some: {
-          Course: {
-            subjects: {
-              some: {
-                subjectCode: values.subject,
-              },
-            },
+      course: {
+        subjects: {
+          some: {
+            subjectCode: subject.subjectCode,
           },
         },
       },
     },
+    orderBy: {
+      icNo: 'asc',
+    },
   });
 
-  return result;
+  results.map((user) => {
+    if (user.testResults.length === 0) return;
+
+    if (
+      !user.testResults.some((testResult) => {
+        return testResult.subjectId === subject?.id;
+      })
+    ) {
+      user.testResults = [];
+    }
+  });
+
+  return results;
 }
