@@ -1,21 +1,11 @@
-import { db } from '@/lib/db';
+import { fetchUsers } from '@/lib/fetchUsers';
 
 import { DataTable } from '@/components/ui/data-table';
 
 import { columns } from '@/app/users/columns';
 
-async function getUsers() {
-  const users = await db.user.findMany({
-    orderBy: {
-      icNo: 'asc',
-    },
-  });
-
-  return users;
-}
-
 export default async function Users() {
-  const users = await getUsers();
+  const users = await fetchUsers();
 
   return <DataTable columns={columns} data={users} type="user" toolbar />;
 }

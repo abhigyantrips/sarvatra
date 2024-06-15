@@ -6,15 +6,16 @@ import { DataTable } from '@/app/subjects/data-table';
 async function getSubjects(courseCode: string) {
   const subjects = await db.subject.findMany({
     include: {
-      course: true,
+      courses: true,
     },
-    where: { course: { courseCode } },
-    orderBy: [
-      {
-        course: {
-          courseCode: 'asc',
+    where: {
+      courses: {
+        some: {
+          courseCode,
         },
       },
+    },
+    orderBy: [
       {
         subjectCode: 'asc',
       },
