@@ -11,7 +11,8 @@ export async function postSubject(values: any) {
       subjectCode: values.subjectCode,
       name: values.name,
       semester: values.semester,
-      course: {
+      credits: values.credits,
+      courses: {
         connect: {
           courseCode: values.course,
         },
@@ -20,7 +21,8 @@ export async function postSubject(values: any) {
     update: {
       name: values.name,
       semester: values.semester,
-      course: {
+      credits: values.credits,
+      courses: {
         connect: {
           courseCode: values.course,
         },

@@ -38,6 +38,10 @@ const addSubjectSchema = y.object().shape({
     .number()
     .transform((value) => (isNaN(value) ? undefined : value))
     .required('This field is required'),
+  credits: y
+    .number()
+    .transform((value) => (isNaN(value) ? undefined : value))
+    .required('This field is required'),
 });
 
 export default function AddSubject() {
@@ -135,9 +139,22 @@ export default function AddSubject() {
             />
             <FormField
               control={form.control}
+              name="credits"
+              render={({ field }) => (
+                <FormItem className="col-span-1">
+                  <FormLabel>Credits</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="3" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="course"
               render={({ field }) => (
-                <FormItem className="col-span-3">
+                <FormItem className="col-span-2">
                   <FormLabel>Course</FormLabel>
                   <Select
                     onValueChange={field.onChange}

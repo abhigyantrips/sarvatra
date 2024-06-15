@@ -15,11 +15,9 @@ async function getSubjects(courseCode: string) {
         },
       },
     },
-    orderBy: [
-      {
-        subjectCode: 'asc',
-      },
-    ],
+    orderBy: {
+      subjectCode: 'asc',
+    },
   });
 
   return subjects;
