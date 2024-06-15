@@ -5,54 +5,71 @@ import type { ColumnDef } from '@tanstack/react-table';
 
 import { getLetterGrade } from '@/lib/getLetterGrade';
 
-type ResultWithStudent = Prisma.ResultGetPayload<{
-  include: { student: true };
+type StudentWithResults = Prisma.UserGetPayload<{
+  include: { course: true; testResults: true };
 }>;
 
-export const columns: ColumnDef<ResultWithStudent>[] = [
+export const columns: ColumnDef<StudentWithResults>[] = [
   {
-    id: 'icNo',
-    accessorFn: (row) => `${row.student.icNo}`,
+    accessorKey: 'icNo',
     header: 'IC No.',
   },
   {
     id: 'rank',
-    accessorFn: (row) => (row.student.rank ? `${row.student.rank}` : '-'),
+    accessorFn: (row) => (row.rank ? `${row.rank}` : '-'),
     header: 'Rank',
   },
   {
     id: 'name',
-    accessorFn: (row) => `${row.student.firstName} ${row.student.lastName}`,
+    accessorFn: (row) => `${row.firstName} ${row.lastName}`,
     header: 'Name',
   },
   {
-    accessorKey: 'PH1',
+    id: 'PH1',
+    accessorFn: (row) => `${row.testResults[0] ? row.testResults[0].PH1 : '-'}`,
     header: 'PH1 (20)',
   },
   {
-    accessorKey: 'PH2',
+    id: 'PH2',
+    accessorFn: (row) => `${row.testResults[0] ? row.testResults[0].PH2 : '-'}`,
     header: 'PH2 (20)',
   },
   {
-    accessorKey: 'assignment',
+    id: 'assignment',
+    accessorFn: (row) =>
+      `${row.testResults[0] ? row.testResults[0].assignment : '-'}`,
     header: 'Assignment (10)',
   },
   {
-    accessorKey: 'finals',
+    id: 'finals',
+    accessorFn: (row) =>
+      `${row.testResults[0] ? row.testResults[0].finals : '-'}`,
     header: 'Finals (50)',
   },
   {
-    accessorKey: 'overall',
+    id: 'overall',
     header: 'Total',
     cell: ({ row }) => {
-      return <b>{row.original.overall}</b>;
+      return (
+        <b>
+          {row.original.testResults[0]
+            ? row.original.testResults[0].overall
+            : '-'}
+        </b>
+      );
     },
   },
   {
     accessorKey: 'letterGrade',
     header: 'Letter Grade',
     cell: ({ row }) => {
-      return <b>{getLetterGrade(row.original.overall) ?? 'ND'}</b>;
+      return (
+        <b>
+          {row.original.testResults[0]
+            ? getLetterGrade(row.original.testResults[0].overall)
+            : 'ND'}
+        </b>
+      );
     },
   },
 ];
