@@ -1,14 +1,12 @@
-import { toast } from 'sonner';
-
 import { redirect } from 'next/navigation';
 
 import { fetchResults } from '@/lib/fetchResults';
 import { fetchSubject } from '@/lib/fetchSubject';
 
 import { Badge } from '@/components/ui/badge';
-import { DataTable } from '@/components/ui/data-table';
 
 import { columns } from '@/app/marks/columns';
+import { DataTable } from '@/app/marks/data-table';
 
 export default async function Marksheets({
   searchParams,
@@ -51,7 +49,7 @@ export default async function Marksheets({
       </div>
       <DataTable
         columns={columns}
-        data={results}
+        defaultData={results}
         type="result"
         toolbar={false}
       />
