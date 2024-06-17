@@ -13,6 +13,7 @@ import { Plus } from 'lucide-react';
 import * as React from 'react';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
 
@@ -41,14 +42,12 @@ export function DataTable<TData, TValue>({
   toolbar,
 }: DataTableProps<TData, TValue>) {
   const [data, setData] = React.useState(() => [...defaultData]);
-  const [originalData, setOriginalData] = React.useState(() => [
-    ...defaultData,
-  ]);
   const [editedRows, setEditedRows] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
 
+  const router = useRouter();
   const table = useReactTable({
     data,
     columns,
@@ -60,13 +59,9 @@ export function DataTable<TData, TValue>({
       setEditedRows,
       revertData: (rowIndex: number, revert: boolean) => {
         if (revert) {
-          setData((old) =>
-            old.map((row, index) =>
-              index === rowIndex ? originalData[rowIndex] : row
-            )
-          );
+          router.refresh;
         } else {
-          setOriginalData((old) =>
+          setData((old) =>
             old.map((row, index) => (index === rowIndex ? data[rowIndex] : row))
           );
         }

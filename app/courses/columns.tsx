@@ -22,6 +22,6 @@ export const columns: ColumnDef<Course>[] = [
   },
   {
     accessorKey: 'total',
-    header: 'Total (40 * Credits)',
+    header: 'Total',
   },
 ];
