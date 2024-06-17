@@ -32,7 +32,7 @@ const addSubjectSchema = y.object().shape({
   name: y.string().required('This field is required'),
   course: y
     .string()
-    .oneOf(['MTech', 'EODE1', 'EODE2', 'TES1', 'TES2'])
+    .oneOf(['MTech', 'EODEC', 'EODEE', 'TESC', 'TESM'])
     .required('This field is required'),
   semester: y
     .number()
@@ -169,10 +169,10 @@ export default function AddSubject() {
                       <SelectItem value="MTech">
                         M.Tech - Energy Systems
                       </SelectItem>
-                      <SelectItem value="EODE1">EODE - Electrical</SelectItem>
-                      <SelectItem value="EODE2">EODE - Civil</SelectItem>
-                      <SelectItem value="TES1">TES - Civil</SelectItem>
-                      <SelectItem value="TES2">TES - Mechanical</SelectItem>
+                      <SelectItem value="EODEE">EODE - Electrical</SelectItem>
+                      <SelectItem value="EODEC">EODE - Civil</SelectItem>
+                      <SelectItem value="TESC">TES - Civil</SelectItem>
+                      <SelectItem value="TESM">TES - Mechanical</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
