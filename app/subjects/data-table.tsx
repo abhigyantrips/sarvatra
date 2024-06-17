@@ -9,6 +9,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Plus } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 
 import * as React from 'react';
@@ -46,6 +47,7 @@ export function DataTable<TData, TValue>({
     []
   );
   const router = useRouter();
+  const { data: session, status } = useSession();
   const table = useReactTable({
     data,
     columns,
@@ -104,12 +106,33 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
                   onClick={() => {
-                    toast.info('Loading subject marksheet...');
-                    router.push(
-                      `/marks?subjectCode=${(row.original as unknown as any).subjectCode}`
-                    );
+                    if (
+                      (session as unknown as any)?.role === 'ADMIN' ||
+                      (status === 'authenticated' &&
+                        (row.original as unknown as any).teacher)
+                    ) {
+                      if (
+                        (session as unknown as any)?.role === 'ADMIN' ||
+                        (session as unknown as any)?.id ===
+                          (row.original as unknown as any).teacher.icNo
+                      ) {
+                        toast.info('Loading subject marksheet...');
+                        router.push(
+                          `/marks?subjectCode=${(row.original as unknown as any).subjectCode}`
+                        );
+                      } else {
+                        toast.error('You cannot access this marksheet.');
+                      }
+                    }
                   }}
-                  className="cursor-pointer"
+                  className={
+                    (session as unknown as any)?.role === 'ADMIN' ||
+                    ((row.original as unknown as any).teacher &&
+                      (session as unknown as any)?.id ===
+                        (row.original as unknown as any).teacher.icNo)
+                      ? 'cursor-pointer'
+                      : 'pointer-events-auto'
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

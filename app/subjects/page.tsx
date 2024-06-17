@@ -7,6 +7,7 @@ async function getSubjects(courseCode: string) {
   const subjects = await db.subject.findMany({
     include: {
       courses: true,
+      teacher: true,
     },
     where: {
       courses: {
