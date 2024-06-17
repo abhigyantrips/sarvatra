@@ -27,10 +27,11 @@ model User {
   password  String
 
   // Relation fields
-  testResults Result[] @relation(name: "results")
-  testsGraded Result[] @relation(name: "graded")
-  course      Course?  @relation(fields: [courseId], references: [id])
   courseId    Int?
+  testResults Result[]  @relation(name: "results")
+  testsGraded Result[]  @relation(name: "graded")
+  course      Course?   @relation(fields: [courseId], references: [id])
+  Subject     Subject[]
 }
 
 model Course {
@@ -57,8 +58,10 @@ model Subject {
   credits     Int
 
   // Relation Fields
-  courses Course[]
-  results Result[]
+  teacherId Int?
+  courses   Course[]
+  results   Result[]
+  teacher   User?    @relation(fields: [teacherId], references: [id])
 
   @@index([subjectCode])
 }

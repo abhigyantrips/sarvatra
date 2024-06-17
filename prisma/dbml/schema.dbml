@@ -14,10 +14,11 @@ Table User {
   lastName String
   role Role [not null, default: 'STUDENT']
   password String [not null]
+  courseId Int
   testResults Result [not null]
   testsGraded Result [not null]
   course Course
-  courseId Int
+  Subject Subject [not null]
 }
 
 Table Course {
@@ -37,8 +38,10 @@ Table Subject {
   name String [not null, default: '']
   semester Int [not null]
   credits Int [not null]
+  teacherId Int
   courses Course [not null]
   results Result [not null]
+  teacher User
 }
 
 Table Result {
@@ -90,6 +93,8 @@ Enum LetterGrade {
 }
 
 Ref: User.courseId > Course.id
+
+Ref: Subject.teacherId > User.id
 
 Ref: Result.subjectId > Subject.id [delete: Cascade]
 
