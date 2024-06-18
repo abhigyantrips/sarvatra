@@ -1,6 +1,6 @@
 'use server';
 
-import { db } from '@/lib/db';
+import { db } from './db';
 
 export async function postCourse(values: any) {
   await db.course.upsert({

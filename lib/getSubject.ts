@@ -2,7 +2,7 @@
 
 import { db } from './db';
 
-export async function fetchSubject(subjectCode: string) {
+export async function getSubject(subjectCode: string) {
   const subject = await db.subject.findUnique({
     include: {
       courses: true,

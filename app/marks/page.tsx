@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 import { fetchResults } from '@/lib/fetchResults';
-import { fetchSubject } from '@/lib/fetchSubject';
+import { getSubject } from '@/lib/getSubject';
 
 import { Badge } from '@/components/ui/badge';
 
@@ -17,7 +17,7 @@ export default async function Marksheets({
     redirect('/subjects');
   }
 
-  const subject = await fetchSubject(searchParams.subjectCode);
+  const subject = await getSubject(searchParams.subjectCode);
 
   if (!subject) {
     redirect('/subjects');

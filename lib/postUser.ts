@@ -2,7 +2,7 @@
 
 import { hash } from 'bcryptjs';
 
-import { db } from '@/lib/db';
+import { db } from './db';
 
 export async function postUser(values: any) {
   const password = await hash(values.password, 12);

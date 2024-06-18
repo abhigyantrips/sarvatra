@@ -1,6 +1,6 @@
 'use server';
 
-import { db } from '@/lib/db';
+import { db } from './db';
 
 export async function fetchCourses() {
   const courses = await db.course.findMany({});

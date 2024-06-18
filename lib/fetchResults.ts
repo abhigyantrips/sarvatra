@@ -2,7 +2,7 @@
 
 import { Subject } from '@prisma/client';
 
-import { db } from '@/lib/db';
+import { db } from './db';
 
 export async function fetchResults(subject?: Subject) {
   if (!subject) return [];
