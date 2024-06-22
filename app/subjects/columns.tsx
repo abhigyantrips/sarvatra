@@ -37,7 +37,7 @@ export const columns: ColumnDef<SubjectWithCourse>[] = [
       return (
         <HoverCard>
           <HoverCardTrigger asChild>
-            <Button variant="link">
+            <Button variant="link" className="px-0 py-0">
               {ogRow.teacher
                 ? `${ogRow.teacher.rank ?? ''} ${ogRow.teacher.firstName} ${ogRow.teacher.lastName}`
                 : '-'}

@@ -1,10 +1,18 @@
 'use server';
 
-import { Subject, User } from '@prisma/client';
+import { Prisma, Subject } from '@prisma/client';
 
 import { db } from './db';
 
-export async function postResult(user: User, subject: Subject, values: any) {
+type StudentWithResults = Prisma.UserGetPayload<{
+  include: { course: true; testResults: true };
+}>;
+
+export async function postResult(
+  user: StudentWithResults,
+  subject: Subject,
+  values: any
+) {
   const result = await db.result.upsert({
     where: {
       resultId: {
@@ -21,6 +29,7 @@ export async function postResult(user: User, subject: Subject, values: any) {
       IA: values.PH1 + values.PH2 + values.assignment,
       finals: values.finals,
       overall: values.PH1 + values.PH2 + values.assignment + values.finals,
+      graderId: subject.teacherId,
     },
     update: {
       PH1: values.PH1,
@@ -29,6 +38,7 @@ export async function postResult(user: User, subject: Subject, values: any) {
       IA: values.PH1 + values.PH2 + values.assignment,
       finals: values.finals,
       overall: values.PH1 + values.PH2 + values.assignment + values.finals,
+      graderId: subject.teacherId,
     },
   });
 

@@ -47,12 +47,7 @@ export default async function Marksheets({
           <Badge variant="secondary">Credits: {subject?.credits}</Badge>
         </div>
       </div>
-      <DataTable
-        columns={columns}
-        defaultData={results}
-        type="result"
-        toolbar={false}
-      />
+      <DataTable columns={columns} data={results} subject={subject} />
     </div>
   );
 }
