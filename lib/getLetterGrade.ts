@@ -1,7 +1,7 @@
 export function getLetterGrade(overall: number | null) {
   if (!overall) return null;
 
-  if (overall >= 80 && overall < 100) {
+  if (overall >= 80 && overall <= 100) {
     return 'AP';
   } else if (overall >= 70 && overall < 80) {
     return 'AO';
