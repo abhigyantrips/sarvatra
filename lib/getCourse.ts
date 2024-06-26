@@ -1,5 +1,7 @@
 'use server';
 
+import { Course } from '@prisma/client';
+
 import { db } from './db';
 
 export async function getCourse(icNo: string) {
@@ -12,5 +14,5 @@ export async function getCourse(icNo: string) {
     },
   });
 
-  return user?.course;
+  return user?.course || ({} as Course);
 }
