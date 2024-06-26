@@ -23,5 +23,10 @@ export const siteConfig = {
       href: '/users',
       requiredRoles: ['ADMIN'],
     },
+    {
+      title: 'Grade Sheet',
+      href: '/gradesheet',
+      requiredRoles: ['STUDENT'],
+    },
   ] satisfies NavItem[],
 };
