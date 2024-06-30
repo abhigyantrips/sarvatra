@@ -86,7 +86,7 @@ export default function Profile() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ProfileForm />
+              <ProfileForm name={session?.user.name} />
             </CardContent>
             <CardFooter className="border-t px-6 py-4">
               <Button type="submit" form="profile">

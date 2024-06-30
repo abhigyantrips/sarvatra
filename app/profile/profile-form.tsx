@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as y from 'yup';
 
+import { useEffect } from 'react';
+
 import { cn } from '@/lib/utils';
 
 import { Button } from '@/components/ui/button';
@@ -44,17 +46,29 @@ const profileFormSchema = y.object().shape({
     .oneOf(['male', 'female', 'other']),
 });
 
-export function ProfileForm() {
+export function ProfileForm({ name }: { name: string | undefined }) {
+  const names = name?.split(' ') || [];
+  const [rank, firstName, lastName] =
+    names.length >= 2
+      ? names.length === 3
+        ? names
+        : ['-', ...names]
+      : ['', '', ''];
+
   const form = useForm<y.InferType<typeof profileFormSchema>>({
     resolver: yupResolver(profileFormSchema),
     defaultValues: {
-      rank: 'Lt. Col.',
-      firstName: 'Vivek',
-      lastName: 'Pandey',
+      rank: '-',
+      firstName: '-',
+      lastName: '-',
       dateOfBirth: new Date('1999-11-11'),
       gender: 'male',
     },
   });
+
+  useEffect(() => {
+    form.reset({ rank, firstName, lastName });
+  }, [form, rank, firstName, lastName]);
 
   function onSubmit(values: y.InferType<typeof profileFormSchema>) {
     toast.success('Your changes have been saved.');

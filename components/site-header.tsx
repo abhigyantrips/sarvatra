@@ -1,6 +1,7 @@
 'use client';
 
 import { CircleUser } from 'lucide-react';
+import { toast } from 'sonner';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -48,6 +49,10 @@ export function SiteHeader({ role }: { role: string }) {
                     key={index}
                     variant="ghost"
                     className="rounded-full"
+                    onClick={() =>
+                      item.href !== pathname &&
+                      toast.info(`Loading ${item.title.toLowerCase()}...`)
+                    }
                     asChild
                   >
                     <Link href={item.href}>{item.title}</Link>
