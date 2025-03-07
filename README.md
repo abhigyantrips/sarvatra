@@ -24,12 +24,21 @@ This project acts as a proof-of-concept, and has not been currently deployed to 
 
 ### Administrator's UX
 
-![Administrator User Experience Video](/public/meta/general-admin-ux.mp4)
+<video controls>
+	<source src="./public/meta/general-admin-ux.mp4" type="video/mp4">
+	Your browser does not support the video tag.
+</video>
 
 ### Teacher's UX
 
-![Teacher User Experience Video](/public/meta/general-teacher-ux.mp4)
+<video controls>
+	<source src="./public/meta/general-teacher-ux.mp4" type="video/mp4">
+	Your browser does not support the video tag.
+</video>
 
 ### Student's UX
 
-![Student User Experience Video](/public/meta/general-student-ux.mp4)
+<video controls>
+	<source src="./public/meta/general-student-ux.mp4" type="video/mp4">
+	Your browser does not support the video tag.
+</video>
